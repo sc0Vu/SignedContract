@@ -7,20 +7,31 @@ contract SignedContract {
         bytes32 contractHash;
     }
 
-    uint public version=1;
-    address public partyA;
-    address public partyB;
+    uint version = 1;
+    bool confirmed = false;
+    address partyA;
+    address partyB;
     mapping (address => bytes32) signatures;
-    ContractInfo public info;
+    ContractInfo info;
     
-    event SignedContractConfirmed(address indexed a, address indexed b);
+    event SignedContractConfirmed(
+        address indexed _partyA,
+        address indexed _partyB,
+        bytes32 _url,
+        bytes32 _contractHash
+    );
 
     modifier inBoth() {
         if (msg.sender != partyA && msg.sender != partyB) throw;
         _;
     }
 
-    function SignedContract(address to, bytes32 url, bytes32 contractHash) {
+    modifier notConfirmed() {
+        require(confirmed == false);
+        _;
+    }
+
+    function SignedContract(address to, bytes32 url, bytes32 contractHash) notConfirmed {
         if (partyB == msg.sender) throw;
 
         partyA = msg.sender;
@@ -37,12 +48,13 @@ contract SignedContract {
         contractHash = info.contractHash;
     }
     
-    function Signed(bytes32 sign) inBoth {
+    function Signed(bytes32 sign) inBoth notConfirmed {
 		address signer = msg.sender;
 		signatures[signer] = sign;
 		
 		if (signatures[partyA] != 0 && signatures[partyB] != 0) {
-		    SignedContractConfirmed(partyA, partyB);
+		    confirmed = true;
+		    SignedContractConfirmed(partyA, partyB, info.url, info.contractHash);
 		}
 	}
 }
