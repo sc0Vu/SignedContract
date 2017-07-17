@@ -13,3 +13,7 @@ Then he deploy the contract with Alice ethereum address, contract url and contra
 After Bob deploy, he send Alice contract address and wait Alice signed the contract.
 
 Bob signed contract and finish the contract.
+
+# License
+
+GNU General Public License v3.0
