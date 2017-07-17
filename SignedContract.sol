@@ -1,9 +1,9 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.4.12;
 
 contract SignedContract {
 
     struct ContractInfo {
-        bytes32 url;
+        string url;
         bytes32 contractHash;
     }
 
@@ -17,7 +17,7 @@ contract SignedContract {
     event SignedContractConfirmed(
         address indexed _partyA,
         address indexed _partyB,
-        bytes32 _url,
+        string _url,
         bytes32 _contractHash
     );
 
@@ -31,7 +31,7 @@ contract SignedContract {
         _;
     }
 
-    function SignedContract(address to, bytes32 url, bytes32 contractHash) notConfirmed {
+    function SignedContract(address to, string url, bytes32 contractHash) notConfirmed {
         if (partyB == msg.sender) throw;
 
         partyA = msg.sender;
@@ -40,7 +40,7 @@ contract SignedContract {
         info.contractHash = contractHash;
     }
     
-    function getInfoUrl() inBoth  returns(bytes32 url) {
+    function getInfoUrl() inBoth  returns(string url) {
         url = info.url;
     }
     
