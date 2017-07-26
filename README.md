@@ -2,6 +2,14 @@
 
 A smart contract can be used to sign a cloud file contract.
 
+# Usage
+
+    clone the repo and deploy to ethereum blockchain
+
+# Test
+
+    truffle test
+
 # Story
 
 Bob want to make a deal contract with Alice.

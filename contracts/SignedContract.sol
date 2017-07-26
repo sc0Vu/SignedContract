@@ -1,13 +1,13 @@
-pragma solidity ^0.4.12;
+pragma solidity ^0.4.2;
 
 contract SignedContract {
 
     struct ContractInfo {
         string url;
-        bytes32 contractHash;
+        string contractHash;
     }
 
-    uint version = 1;
+    uint version;
     bool confirmed = false;
     address partyA;
     address partyB;
@@ -18,7 +18,7 @@ contract SignedContract {
         address indexed _partyA,
         address indexed _partyB,
         string _url,
-        bytes32 _contractHash
+        string _contractHash
     );
 
     modifier inBoth() {
@@ -31,9 +31,10 @@ contract SignedContract {
         _;
     }
 
-    function SignedContract(address to, string url, bytes32 contractHash) notConfirmed {
+    function SignedContract(address to, string url, string contractHash) notConfirmed {
         if (partyB == msg.sender) throw;
 
+        version = 1;
         partyA = msg.sender;
         partyB = to;
         info.url = url;
@@ -44,11 +45,11 @@ contract SignedContract {
         url = info.url;
     }
     
-    function getInfoContractHash() inBoth  returns(bytes32 contractHash) {
+    function getInfoContractHash() inBoth  returns(string contractHash) {
         contractHash = info.contractHash;
     }
     
-    function Signed(bytes32 sign) inBoth notConfirmed {
+    function signed(bytes32 sign) inBoth notConfirmed {
 		address signer = msg.sender;
 		signatures[signer] = sign;
 		
